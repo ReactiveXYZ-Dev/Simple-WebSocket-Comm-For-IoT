@@ -8,6 +8,14 @@ class WebSocketServer {
 
 		this.server = new wss({'port' : port});
 
+		this.connections = [];
+
+	}
+
+	getServer(){
+
+		return this.server;
+
 	}
 
 	create(){
@@ -16,7 +24,11 @@ class WebSocketServer {
 			
 			this.server.on('connection', (ws) => {
 
-				resolve(ws);
+				// append new connection
+				this.connections.push(ws);
+
+				// resolve ws
+				resolve(this.connections[this.connections.length - 1]);
 
 			});
 
@@ -24,6 +36,17 @@ class WebSocketServer {
 
 	}
 
+	broadcast(message){
+
+		this.connections.forEach((ws) => {
+
+			ws.send(message);
+
+			console.log("Sent: " + message);
+
+		});
+
+	}
 
 }
 

@@ -1,12 +1,18 @@
-let server = require('./modules/WebSocketServer')(8888).create();
+//let wss = require('./modules/WebSocketServer')(8888),
+//	wsServer = wss.create();
+
+var WebSocketServer = require('ws').Server
+  , wss = new WebSocketServer({ port: 8888 });
+
 
 let players = require('./modules/PlayerRepository')().create();
 
 let parser = require('./modules/MessageParser')().create();
 
-server.then((server) => {
 
-	server.on('message', (message) => {
+/* wsServer.then((ws) => {
+
+	ws.on('message', (message) => {
 
 		let udid = parser.load(message).id();
 
@@ -14,17 +20,38 @@ server.then((server) => {
 
 			players.exists(udid).then(() => {
 
-				server.send(message, (error) => {
-
-					console.log(error);
-
-				});
+				wss.broadcast(message);
 
 			});
 
 		});
 
 	});
+
+});*/
+
+wss.on('connection', (ws) => {
+
+	ws.on('message', (message) => {
+
+		let udid = parser.load(message).id();
+
+		players.then(players => {
+
+			players.exists(udid).then(() => {
+
+				// Broadcast to everyone else.
+			    wss.clients.forEach(function each(client) {
+
+			      if (client !== ws) client.send(data);
+
+			    });
+
+			});
+
+		});
+
+	})
 
 });
 
