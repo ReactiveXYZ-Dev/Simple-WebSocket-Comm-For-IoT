@@ -6,22 +6,15 @@ class PlayerRepository {
 
 	create() {
 
-		return new Promise((resolve, reject) => {
-			
-			db.ready(() => {
+		db.setStorageDomain('player');
 
-				db.setStorageDomain('player');
-
-				resolve(this);
-			});
-
-		});
-
+		return this;
 	}
 
-	registerPlayer(id){
+	register(id){
 
-		db.set(sha1(id), true);
+		return db.set(sha1(id), true);
+		
 
 	}
 

@@ -41,23 +41,19 @@ module.exports = (listenOn) => {
 
 			let udid = parser.load(message).id();
 
-			players.then(players => {
+			players.exists(udid).then(() => {
 
-				players.exists(udid).then(() => {
+				// Broadcast to everyone else.
+			    wss.clients.forEach(function each(client) {
 
-					// Broadcast to everyone else.
-				    wss.clients.forEach(function each(client) {
+			      	if (client !== ws) client.send(message);
 
-				      	if (client !== ws) client.send(message);
+			    });
 
-				    });
-
-				})
-				.catch(error => {
-					
-					ws.send("You are not registered!");
-
-				});
+			})
+			.catch(error => {
+				
+				ws.send("You are not registered!");
 
 			});
 

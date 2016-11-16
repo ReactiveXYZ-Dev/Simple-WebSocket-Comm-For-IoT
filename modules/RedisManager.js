@@ -8,16 +8,6 @@ class RedisManager {
 
 	}
 
-	ready(go){
-
-		client.on('connect', () => {
-
-			go();
-
-		});
-
-	}
-
 	setStorageDomain(domain){
 
 		this.domain = domain;
@@ -26,7 +16,23 @@ class RedisManager {
 
 	set(key,value){
 
-		client.set(this.keyInDomain(key),value);
+		return new Promise((resolve,reject) => {
+
+			client.set(this.keyInDomain(key), value, (err, res) => {
+
+				if (err) {
+
+					reject(false);
+
+				} else {
+
+					resolve(true)
+
+				}
+
+			});
+
+		});
 
 	}
 
