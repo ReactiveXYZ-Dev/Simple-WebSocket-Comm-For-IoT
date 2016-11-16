@@ -10,5 +10,11 @@ module.exports = (port) => {
 		console.log(`Http listening on ${port}`);
 	});
 
+	app.get('/', (req,res) => {
+
+		res.send('HOLY GRILL!');
+
+	});
+
 	return server;
 };
