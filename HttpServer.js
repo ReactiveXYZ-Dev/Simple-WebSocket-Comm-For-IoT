@@ -10,10 +10,6 @@ module.exports = (port) => {
 	// set up server
 	server.on('request',app);
 
-	server.listen(port, () => {
-		console.log(`Http listening on ${port}`);
-	});
-
 	// set up request body parser
 	app.use(bodyParser.json());
 	app.use(bodyParser.urlencoded({ extended: true }));
@@ -53,6 +49,14 @@ module.exports = (port) => {
 
 		}
 
+	});
+
+	// start listening
+	server.listen({
+			port: port,
+			host: 'localhost'
+		}() => {
+		console.log(`Http listening on ${port}`);
 	});
 
 	return server;
