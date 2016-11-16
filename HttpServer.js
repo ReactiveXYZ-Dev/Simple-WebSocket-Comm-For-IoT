@@ -55,7 +55,7 @@ module.exports = (port) => {
 	server.listen({
 			port: port,
 			host: 'localhost'
-		}() => {
+		},() => {
 		console.log(`Http listening on ${port}`);
 	});
 
