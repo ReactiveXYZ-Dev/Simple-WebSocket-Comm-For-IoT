@@ -42,7 +42,7 @@ class RedisManager {
 			
 			client.get(this.keyInDomain(key), (error, res) => {
 
-				if (error) {
+				if (error || res == null) {
 
 					reject(error);
 
@@ -60,7 +60,6 @@ class RedisManager {
 	}
 
 	exists(key){
-
 		return new Promise((resolve, reject) => {
 			
 			this.get(key).then(
@@ -70,9 +69,12 @@ class RedisManager {
 									}else{
 										resolve(true);
 									}
-								},
-								error => reject(false)
-							);
+								}
+							)
+							.catch(error => {
+
+									reject(false);
+								});
 
 
 		});
